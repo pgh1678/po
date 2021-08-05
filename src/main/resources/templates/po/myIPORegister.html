@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content">
+
+    <h1 class="mt-4">공모주 청약 내역 등록</h1>
+    <script th:inline="javascript">
+      function calc_deposit(){
+          document.getElementsByName('deposit')[0].value = [[${dto.offeringPrice}]]*document.getElementsByName('subsAmt')[0].value /2;
+      }
+    </script>
+
+    <form th:action="@{/po/myIPORegister}" th:method="post">
+      <input type="hidden" name="userId" th:value="${#authentication.name}">
+      <div class="form-group">
+        <label >종목</label>
+        <div class="row" >
+             <div class="col-xs-3 ml-4" style="white-space:nowrap;">
+            <input type="text" style="width:200px" class="form-control" name="name"  th:value="${dto.name}" readonly >
+          </div>
+          <div class="col-xs-1" style="white-space:nowrap;">
+            <button type="button" class="btn btn-sm searchBtn" disabled> <span class="glyphicon glyphicon-search"></span></button>
+          </div>
+          <div class="col-xs-2" style="white-space:nowrap;">
+            <input type="text" style="width:60px" class="form-control" name="StockCode"   th:value="${dto.stockCode}" readonly >
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+      <label >증권사</label>
+      <div class="input-group-prepend">
+        <select class="custom-select" name="stockFirm">
+          <option th:each="firm : ${firms}" th:value="${firm.firmName}" th:utext="${firm.firmName}"></option>
+        </select>
+      </div>
+
+      </div>
+      <div class="form-group">
+        <div class="form-group">
+          <label >청약주수</label>
+          <input type="text" class="form-control" name="subsAmt"  onchange="calc_deposit();" required>
+        </div>
+        <label >증거금</label>
+        <input type="text" class="form-control" name="deposit"  required>
+      </div>
+      <div class="form-group">
+        <label >배정주수</label>
+        <input type="text" class="form-control" name="assignAmt"  >
+      </div>
+      <div class="form-group">
+        <label >매도가격</label>
+        <input type="text" class="form-control" name="sellPrice"  >
+      </div>
+      <div class="form-group">
+        <label >수수료</label>
+        <input type="text" class="form-control" name="fee"  >
+      </div>
+      <div class="form-group">
+        <label >세금</label>
+        <input type="text" class="form-control" name="tax"  >
+      </div>
+      <div class="form-group">
+        <label >이자</label>
+        <input type="text" class="form-control" name="interest"  >
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <script th:inline="javascript">
+        $(".searchBtn").click(function() {
+
+          SearchStock = window.open("IPOPopUp", "StockSearch", "width=666,height=700,left=250,top=50,dependent=yes,menubar=no,status=no,resizable=yes,toolbar=no,scrollbars=yes");
+          SearchStock.location.href = 'IPOPopUp';
+          SearchStock.focus();
+          return false;
+        });
+    </script>
+  </th:block>
+
+</th:block>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <h1 class="mt-4">공모정보</h1>
+
+        <div class="form-group">
+            <label >종목코드</label>
+            <input type="text" class="form-control" name="StockCode" th:value="${dto.stockCode}" readonly >
+        </div>
+
+        <div class="form-group">
+            <label >종목명</label>
+            <input type="text" class="form-control" name="name" th:value="${dto.name}" readonly >
+        </div>
+        <div class="form-group">
+            <label >공모시작일</label>
+            <input type="text" class="form-control" name="offeringDate" th:value="${dto.startDate}" readonly >
+
+        </div>
+        <div class="form-group">
+            <label >공모종료일</label>
+            <input type="text" class="form-control" name="offeringDate" th:value="${dto.endDate}" readonly >
+
+        </div>
+        <div class="form-group">
+            <label >상장일</label>
+            <input type="text" class="form-control" name="listedDate" th:value="${dto.listedDate}" readonly>
+        </div>
+        <div class="form-group">
+            <label >공모가</label>
+            <input type="text" class="form-control" name="offeringPrice" th:value="${dto.offeringPrice}" readonly>
+        </div>
+        <div class="form-group">
+            <label >환불일</label>
+            <input type="text" class="form-control" name="refundDate" th:value="${dto.refundDate}" readonly>
+        </div>
+        <div class="form-group">
+            <label >주간사</label>
+            <input type="text" class="form-control" name="leadingFirm" th:value="${dto.leadingFirm}" readonly>
+        </div>
+
+        <!--        <a th:href="@{/guestbook/modify(gno = ${dto.gno}, page=${requestDTO.page})}"><button type="button" class="btn btn-primary">Modify</button></a>-->
+
+        <!--        <a th:href="@{/guestbook/list(page=${requestDTO.page})}"><button type="button" class="btn btn-info">List</button></a>-->
+
+        <a th:href="@{/po/IPOmodify(stockCode = ${dto.stockCode}, page=${requestDTO.page})}">
+            <button type="button" class="btn btn-primary">Modify</button>
+        </a>
+
+        <a th:href="@{/po/IPOlist(page=${requestDTO.page})}">
+            <button type="button" class="btn btn-info">List</button>
+        </a>
+
+    </th:block>
+
+</th:block>

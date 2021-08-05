@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content"  >
+    <script th:inline="javascript">
+      var sum_profit = 0;
+    </script>
+    <h1 class="mt-4">청약 내역 리스트</h1>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#reg" disabled>
+      신규등록
+    </button>
+
+
+    <br>
+    <div style="white-space:nowrap;  overflow:auto">
+      <form action="/po/myIPO" method="get" id="searchForm" style="width:600px; white-space:nowrap;">
+        <div class="input-group"  style="white-space:nowrap;">
+          <input type="hidden" name="page" value = "1">
+          <div class="input-group-prepend">
+            <select class="custom-select" name="type">
+              <option value="a" th:selected="${pageRequestDTO.type =='a'}" >전체</option>
+              <option value="l" th:selected="${pageRequestDTO.type =='l'}" >상장일</option>
+              <option value="f" th:selected="${pageRequestDTO.type =='f'}"  >청약시작일</option>
+              <option value="t"  th:selected="${pageRequestDTO.type =='t'}" >청약종료일</option>
+            </select>
+          </div>
+          <input  type="date" name="fromDt" th:value="${pageRequestDTO.fromDt}">
+          <h4>~</h4>
+          <input  type="date" name="toDt"  th:value="${pageRequestDTO.toDt}">
+          <div class="input-group-append" id="button-addon4">
+            <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <br>
+    <div style="width=2000px; overflow:auto">
+    <table class="table table-striped" style="white-space:nowrap; width=4000px" >
+      <thead>
+      <tr>
+        <th scope="col" hidden="true">sno</th>
+        <th scope="col" hidden="true">종목코드</th>
+        <th scope="col" width="400px">종목명</th>
+        <th scope="col" width="250px">공모가</th>
+        <th scope="col" width="250px">상장일</th>
+        <th scope="col" width="250px">환불일</th>
+        <th scope="col" width="250px">증권사</th>
+        <th scope="col" width="250px">증거금</th>
+        <th scope="col" width="250px">청약수량</th>
+        <th scope="col" width="250px">배정수량</th>
+        <th scope="col" width="250px">매수금액</th>
+        <th scope="col" width="250px">매도금액</th>
+        <th scope="col" width="250px">수수료</th>
+        <th scope="col" width="250px">세금</th>
+        <th scope="col" width="250px">이자</th>
+        <th scope="col" width="250px">실현손익</th>
+        <th scope="col" width="250px">수익률</th>
+        <th scope="col" width="250px">예수금</th>
+        <th scope="col">      </th>
+      </tr>
+      </thead>
+      <tbody >
+      <tr th:each="dto : ${result.dtoList}" >
+        <th scope=="row" hidden="true" >[[${dto.sno}]]</th>
+        <td hidden="true">[[${dto.stockCode}]]</td>
+        <td><a th:href="@{/po/myIPORead(sno = ${dto.sno}, page= ${result.page})}">[[${dto.name}]]</a></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.offeringPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td>[[${dto.listedDate}]]</td>
+        <td>[[${dto.refundDate}]]</td>
+        <td>[[${dto.stockFirm}]]</td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.deposit}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.subsAmt}]];
+                      document.write(temp.toLocaleString('ko-KR'));</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.assignAmt}]];
+                      document.write(temp.toLocaleString('ko-KR'));</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.assignAmt}*${dto.offeringPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.sellPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.fee}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.tax}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.interest}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[${dto.sellPrice}]] == 0 ? 0 : [[(${dto.sellPrice}-${dto.offeringPrice})*${dto.assignAmt}]];
+                      sum_profit = sum_profit + temp;
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><script th:inline="javascript">
+                      temp = [[${dto.assignAmt}]] == 0 || [[${dto.sellPrice}]] == 0 ? 0 : [[(${dto.sellPrice}-${dto.offeringPrice})*${dto.assignAmt}]]/[[(${dto.assignAmt}*${dto.offeringPrice})]]*100;
+                      document.write(temp.toLocaleString('ko-KR')+"%");</script></td>
+        <td><script th:inline="javascript">
+                      var temp = [[(${dto.sellPrice}*${dto.assignAmt})-${dto.fee}-${dto.tax}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+        <td><a th:href="@{/po/myIPOModify(sno = ${dto.sno})}"><button>수정</button></a></td>
+      </tr>
+      <tr>
+        <td colspan="4">실현 손익 합계</td>
+        <td colspan="4"><script th:inline="javascript">document.write(sum_profit.toLocaleString('ko-KR')+"원");</script></td>
+        <td colspan="4">수익률</td>
+        <td colspan="4"></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+
+    <ul class="pagination h-100 justify-content-center align-items-center">
+
+      <li class="page-item " th:if="${result.prev}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${result.start -1},
+                    type=${pageRequestDTO.type}) }" tabindex="-1">Previous</a>
+      </li>
+
+      <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${result.page},
+                    type=${pageRequestDTO.type}) }">
+          [[${page}]]
+        </a>
+      </li>
+
+      <li class="page-item" th:if="${result.next}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${result.end + 1} ,
+                    type=${pageRequestDTO.type})">Next</a>
+      </li>
+
+    </ul>
+
+    <div class="modal" id="reg" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/po/IPOListForPopup" method="get" id="searchStock" style="width:600px; white-space:nowrap;">
+              <div class="input-group"  style="white-space:nowrap;">
+                <input  type="input" name="stockName" required>
+                <div class="input-group-append" id="button-addon5">
+                  <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+
+            var msg = [[${msg}]];
+
+            console.log(msg);
+
+            if(msg){
+                $(".modal").modal();
+            }
+
+        function addComma(value){
+          var temp = value;
+          document.write(temp.toLocaleString('ko-KR'))
+        }
+
+        var searchForm = $("#searchForm");
+
+        $('.btn-search').click(function(e){
+                searchForm.submit();
+        });
+    </script>
+  </th:block>
+</th:block>
+</html>

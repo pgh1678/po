@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <h1 class="mt-4">공모주 수정</h1>
+
+        <form action="/po/IPOmodify" method="post">
+
+            <!--페이지 번호  -->
+            <input type="hidden" name="page" th:value="${requestDTO.page}">
+            <input type="hidden" name="type" th:value="${requestDTO.type}" >
+            <input type="hidden" name="keyword" th:value="${requestDTO.keyword}" >
+
+            <div class="form-group">
+                <label >종목코드</label>
+                <input type="text" class="form-control" name="StockCode" th:value="${dto.stockCode}" readonly >
+            </div>
+
+            <div class="form-group">
+                <label >종목명</label>
+                <input type="text" class="form-control" name="name" th:value="${dto.name}" readonly >
+            </div>
+            <div class="form-group">
+                <label >공모시작일</label>
+                <input type="text" class="form-control" name="startDate" th:value="${dto.startDate}"  >
+            </div>
+            <div class="form-group">
+                <label >공모종료일</label>
+                <input type="text" class="form-control" name="endDate" th:value="${dto.endDate}"  >
+
+            </div>
+            <div class="form-group">
+                <label >상장일</label>
+                <input type="text" class="form-control" name="listedDate" th:value="${dto.listedDate}" >
+            </div>
+            <div class="form-group">
+                <label >공모가</label>
+                <input type="text" class="form-control" name="offeringPrice" th:value="${dto.offeringPrice}" >
+            </div>
+            <div class="form-group">
+                <label >환불일</label>
+                <input type="text" class="form-control" name="refundDate" th:value="${dto.refundDate}" >
+            </div>
+            <div class="form-group">
+                <label >주간사</label>
+                <input type="text" class="form-control" name="leadingFirm" th:value="${dto.leadingFirm}" >
+            </div>
+
+        </form>
+
+        <button type="button" class="btn btn-primary modifyBtn">Modify</button>
+
+        <button type="button" class="btn btn-info listBtn">List</button>
+
+        <button type="button" class="btn btn-danger removeBtn">Remove</button>
+
+        <script th:inline="javascript">
+
+            var actionForm = $("form"); //form 태그 객체
+
+            $(".removeBtn").click(function(){
+
+                actionForm
+                    .attr("action", "/po/IPOremove")
+                    .attr("method","post");
+
+                actionForm.submit();
+
+            });
+
+            $(".modifyBtn").click(function() {
+
+                if(!confirm("수정하시겠습니까?")){
+                    return ;
+                }
+
+                actionForm
+                    .attr("action", "/po/IPOmodify")
+                    .attr("method","post")
+                    .submit();
+            });
+
+            $(".listBtn").click(function() {
+
+                //var pageInfo = $("input[name='page']");
+                var page = $("input[name='page']");
+                var type = $("input[name='type']");
+                var keyword = $("input[name='keyword']");
+
+                actionForm.empty(); //form 태그의 모든 내용을 지우고
+
+                actionForm.append(page);
+                actionForm.append(type);
+                actionForm.append(keyword);
+
+
+                actionForm
+                    .attr("action", "/po/IPOlist")
+                    .attr("method","get");
+
+               actionForm.submit();
+
+            })
+
+        </script>
+
+
+    </th:block>
+
+</th:block>
