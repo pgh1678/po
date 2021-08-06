@@ -35,6 +35,8 @@ public class IPO extends BaseEntity{
 
     private Long offeringPrice;
 
+    private Long unlistedPrice;
+
     @Column(length = 50, nullable = true)
     private String leadingFirm;
 

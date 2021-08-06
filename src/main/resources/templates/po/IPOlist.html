@@ -51,6 +51,7 @@
                 <th scope="col" width="250px">종목명</th>
                 <th scope="col">공모일정</th>
                 <th scope="col">공모가</th>
+                <th scope="col">비상장거래가</th>
                 <th scope="col">상장일</th>
                 <th scope="col">환불일</th>
                 <th scope="col" width="150px">주간사</th>
@@ -64,6 +65,9 @@
                 <td>[[${dto.startDate}]] ~ [[${dto.endDate}]]</td>
                 <td><script th:inline="javascript">
                       var temp = [[${dto.offeringPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+                <td><script th:inline="javascript">
+                      var temp = [[${dto.unlistedPrice}]];
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
                 <td>[[${dto.listedDate}]]</td>
                 <td>[[${dto.refundDate}]]</td>

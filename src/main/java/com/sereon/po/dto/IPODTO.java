@@ -29,6 +29,8 @@ public class IPODTO {
 
     private String leadingFirm;
 
+    private Long unlistedPrice;
+
 
 
     private LocalDateTime regDate, chgDate;

@@ -41,6 +41,7 @@ public interface POService {
                 .parValue(dto.getParValue())
                 .offeringPrice(dto.getOfferingPrice())
                 .leadingFirm(dto.getLeadingFirm())
+                .unlistedPrice(dto.getUnlistedPrice())
                 .build();
         return entity;
     }
@@ -56,6 +57,7 @@ public interface POService {
                 .parValue(entity.getParValue())
                 .offeringPrice(entity.getOfferingPrice())
                 .leadingFirm(entity.getLeadingFirm())
+                .unlistedPrice(entity.getUnlistedPrice())
                 .build();
 
         return dto;
