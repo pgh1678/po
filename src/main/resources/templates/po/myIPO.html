@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+  thead {
+    position: sticky;
+    top: 0;
+  }
 
+  th:first-child,
+  td:first-child {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #fff;
+    left: 0;
+    z-index: 99;
+  }
+
+  table.table-striped tr:nth-of-type(odd) td:nth-child(1) {
+    background-color: #f2f2f2; / restore table-striped */
+  }
+
+</style>
 <th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
 
   <th:block th:fragment="content"  >
@@ -36,13 +55,13 @@
       </form>
     </div>
     <br>
-    <div style="width=2000px; overflow:auto">
-    <table class="table table-striped" style="white-space:nowrap; width=4000px" >
-      <thead>
+    <div style="overflow:auto">
+    <table class="table table-striped" style="white-space:nowrap; overflow:auto" >
+      <thead >
       <tr>
+        <th scope="col" width="400px">종목명</th>
         <th scope="col" hidden="true">sno</th>
         <th scope="col" hidden="true">종목코드</th>
-        <th scope="col" width="400px">종목명</th>
         <th scope="col" width="250px">공모가</th>
         <th scope="col" width="250px">상장일</th>
         <th scope="col" width="250px">환불일</th>
@@ -63,9 +82,10 @@
       </thead>
       <tbody >
       <tr th:each="dto : ${result.dtoList}" >
+        <td><a th:href="@{/po/myIPORead(sno = ${dto.sno}, page= ${result.page})}">[[${dto.name}]]</a></td>
         <th scope=="row" hidden="true" >[[${dto.sno}]]</th>
         <td hidden="true">[[${dto.stockCode}]]</td>
-        <td><a th:href="@{/po/myIPORead(sno = ${dto.sno}, page= ${result.page})}">[[${dto.name}]]</a></td>
+
         <td><script th:inline="javascript">
                       var temp = [[${dto.offeringPrice}]];
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
@@ -109,7 +129,8 @@
         <td><a th:href="@{/po/myIPOModify(sno = ${dto.sno})}"><button>수정</button></a></td>
       </tr>
       <tr>
-        <td colspan="4">실현 손익 합계</td>
+        <td hidden></td>
+        <td colspan="3">실현 손익 합계</td>
         <td colspan="4"><script th:inline="javascript">document.write(sum_profit.toLocaleString('ko-KR')+"원");</script></td>
         <td colspan="4">수익률</td>
         <td colspan="4"></td>

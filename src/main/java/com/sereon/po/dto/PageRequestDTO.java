@@ -28,7 +28,7 @@ public class PageRequestDTO {
 
     public PageRequestDTO(){
         this.page = 1;
-        this.size = 20;
+        this.size = 12;
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         year = Integer.parseInt(sdf.format(date));
