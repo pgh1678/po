@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+  thead {
+    position: sticky;
+    top: 0;
+  }
 
+  th:first-child,
+  td:first-child {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #fff;
+    left: 0;
+    z-index: 99;
+  }
+
+  table.table-striped tr:nth-of-type(odd) td:nth-child(1) {
+    background-color: #f2f2f2; / restore table-striped */
+  }
+
+</style>
 <th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
 
     <th:block th:fragment="content"
@@ -47,8 +66,8 @@
         <table class="table table-striped"  style="white-space:nowrap; width=4000px" >
             <thead>
             <tr>
-                <th scope="col" hidden="true">종목코드</th>
                 <th scope="col" width="250px">종목명</th>
+                <th scope="col" hidden="true">종목코드</th>
                 <th scope="col">공모일정</th>
                 <th scope="col">공모가</th>
                 <th scope="col">비상장거래가</th>
@@ -60,8 +79,8 @@
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
-                <th scope=="row" hidden="true" >[[${dto.stockCode}]]</th>
                 <td><a th:href="@{/po/IPOread(stockCode = ${dto.stockCode}, page= ${result.page})}">[[${dto.name}]]</a></td>
+                <th scope=="row" hidden="true" >[[${dto.stockCode}]]</th>
                 <td>[[${dto.startDate}]] ~ [[${dto.endDate}]]</td>
                 <td><script th:inline="javascript">
                       var temp = [[${dto.offeringPrice}]];

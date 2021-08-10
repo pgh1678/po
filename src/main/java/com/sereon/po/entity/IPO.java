@@ -43,6 +43,9 @@ public class IPO extends BaseEntity{
     @Column(length = 255, nullable = true)
     private String detailURL;
 
+    @Column(length = 2, nullable = true)
+    private String type;
+
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
