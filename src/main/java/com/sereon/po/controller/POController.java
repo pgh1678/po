@@ -47,6 +47,7 @@ public class POController
         log.info("stockCode : "+stockCode);
 
         model.addAttribute("dto", poService.IPORead(stockCode));
+        model.addAttribute("firms", poService.getFirms(stockCode));
 
     }
 
@@ -86,6 +87,7 @@ public class POController
 
         pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
         model.addAttribute("result", poService.getMyIPOListByPeriod(pageRequestDTO));
+        model.addAttribute("summary", poService.getSummary(pageRequestDTO));
 
     }
 

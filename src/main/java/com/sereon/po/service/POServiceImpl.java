@@ -16,6 +16,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -116,6 +117,9 @@ public class POServiceImpl implements POService{
 
         Function<Object[], MyIPODTO> fn = (en -> entityToDTO((Subscription)en[0],(IPO)en[1]));
 
+        String fromDt = requestDTO.getFromDt()==null ? "":requestDTO.getFromDt().replace("-","");
+        String toDt = requestDTO.getToDt()==null ? "":requestDTO.getToDt().replace("-","");
+
 
         Page<Object[]> result1 = null;
         if(requestDTO.getType() == null){
@@ -124,13 +128,13 @@ public class POServiceImpl implements POService{
         }else if(requestDTO.getType().equals("l")) {
             log.info("Search Type :" + requestDTO.getType());
             log.info(requestDTO.getToDt().replace("-",""));
-            result1 = subscriptionRepository.findAllByListedDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),  requestDTO.getFromDt().replace("-",""), requestDTO.getToDt().replace("-",""));
+            result1 = subscriptionRepository.findAllByListedDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),  fromDt, toDt);
         }else if(requestDTO.getType().equals("f")){
             log.info("Search Type :" + requestDTO.getType());
-            result1 = subscriptionRepository.findAllByStartDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")), requestDTO.getFromDt().replace("-",""), requestDTO.getToDt().replace("-",""));
+            result1 = subscriptionRepository.findAllByStartDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")), fromDt, toDt);
         }else if(requestDTO.getType().equals("t")){
             log.info("Search Type :" + requestDTO.getType());
-            result1 = subscriptionRepository.findAllByEndDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")), requestDTO.getFromDt().replace("-",""), requestDTO.getToDt().replace("-",""));
+            result1 = subscriptionRepository.findAllByEndDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")), fromDt, toDt);
         }else{
             log.info("Search Type :" + requestDTO.getType());
             result1 = subscriptionRepository.findAllByUserId(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),requestDTO.getUserId());
@@ -143,6 +147,27 @@ public class POServiceImpl implements POService{
             }
         }
         return new PageResultDTO(result1, fn);
+    }
+
+    @Override
+    public List<Long> getSummary(PageRequestDTO requestDTO){
+        log.info("Summary : "+ requestDTO);
+
+        String fromDt = requestDTO.getFromDt()==null ? "":requestDTO.getFromDt().replace("-","");
+        String toDt = requestDTO.getToDt()==null ? "":requestDTO.getToDt().replace("-","");
+
+        Long ytd = subscriptionRepository.findYTD(requestDTO.getUserId(), fromDt, toDt);
+
+        Long maxDeposit = subscriptionRepository.findMaxDeposit(requestDTO.getUserId(),fromDt, toDt);
+        System.out.println("ytd = "+ytd + ", max =  "+ maxDeposit);
+
+        List<Long> result = new ArrayList<Long>();
+
+        result.add(ytd);
+        result.add(maxDeposit);
+
+
+        return result;
     }
 
     @Override

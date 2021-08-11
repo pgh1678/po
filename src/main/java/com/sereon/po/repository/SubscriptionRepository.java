@@ -25,4 +25,11 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     @Query("select s, i from Subscription s join IPO i on i = s.IPO.stockCode where s.userId=:userId")
     Page<Object[]> findAllByUserId(Pageable pageable,@Param("userId") String userId);
 
+    @Query("SELECT sum(s.sellPrice * s.assignAmt - s.fee - s.tax - s.interest) FROM Subscription s JOIN IPO i ON i = s.IPO.stockCode WHERE s.userId =:userId AND i.listedDate between coalesce(:fromDt,'20200101') and :toDt")
+    Long findYTD(@Param("userId") String userId,@Param("fromDt") String fromDt, @Param("toDt") String toDt);
+
+    @Query("SELECT max(s.deposit) FROM Subscription s JOIN IPO i ON i = s.IPO.stockCode WHERE s.userId =:userId AND i.listedDate between coalesce(:fromDt,'20200101') and :toDt")
+    Long findMaxDeposit(@Param("userId") String userId, @Param("fromDt") String fromDt, @Param("toDt") String toDt);
+
+
 }

@@ -5,16 +5,21 @@
 
     <th:block th:fragment="content">
 
+        <script>
+            function openLink(){
+                window.open("[[${dto.detailURL}]]");
+            }
+        </script>
         <h1 class="mt-4">공모정보</h1>
 
         <div class="form-group">
             <label >종목코드</label>
-            <input type="text" class="form-control" name="StockCode" th:value="${dto.stockCode}" readonly >
+            <input type="text" class="form-control" name="StockCode" th:value="${dto.stockCode}" readonly  onclick="openLink()">
         </div>
 
         <div class="form-group">
             <label >종목명</label>
-            <input type="text" class="form-control" name="name" th:value="${dto.name}" readonly >
+            <input type="text" class="form-control" name="name" th:value="${dto.name}" readonly onclick="openLink()">
         </div>
         <div class="form-group">
             <label >공모시작일</label>
@@ -43,6 +48,31 @@
             <input type="text" class="form-control" name="leadingFirm" th:value="${dto.leadingFirm}" readonly>
         </div>
 
+        <div class="form-group">
+            <table class="table table-striped" style="white-space:nowrap; overflow:auto" >
+                <thead>
+                <tr>
+                    <th scope="col" width="100px">증권사</th>
+                    <th scope="col" width="50px">배정수량</th>
+                    <th scope="col" width="50px">청약한도</th>
+                    <th scope="col" width="100px">비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="firm : ${firms}" >
+                        <td>[[${firm.firmName}]]</td>
+                        <td><script th:inline="javascript">
+                      var temp = [[${firm.assignAmt}]];
+                      document.write(temp.toLocaleString('ko-KR'));</script></td>
+                        <td><script th:inline="javascript">
+                      var temp = [[${firm.limitAmt}]];
+                      document.write(temp.toLocaleString('ko-KR'));</script></td>
+                        <td>[[${firm.RMK}]]</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
         <!--        <a th:href="@{/guestbook/modify(gno = ${dto.gno}, page=${requestDTO.page})}"><button type="button" class="btn btn-primary">Modify</button></a>-->
 
         <!--        <a th:href="@{/guestbook/list(page=${requestDTO.page})}"><button type="button" class="btn btn-info">List</button></a>-->
@@ -54,6 +84,7 @@
         <a th:href="@{/po/IPOlist(page=${requestDTO.page})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
+
 
     </th:block>
 

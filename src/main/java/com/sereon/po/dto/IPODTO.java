@@ -31,6 +31,8 @@ public class IPODTO {
 
     private Long unlistedPrice;
 
+    private String detailURL;
+
 
 
     private LocalDateTime regDate, chgDate;

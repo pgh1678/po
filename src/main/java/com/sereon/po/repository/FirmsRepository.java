@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface FirmsRepository extends JpaRepository<FirmsByStockCode, String> {
 
-    @Query("select f from FirmsByStockCode f where f.stockCode = :stockCode")
+    @Query("select f from FirmsByStockCode f where f.stockCode = :stockCode order by assignAmt desc")
     List<FirmsByStockCode> findByStockCode(@Param("stockCode") String stockCode);
 
 

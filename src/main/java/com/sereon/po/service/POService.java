@@ -23,6 +23,7 @@ public interface POService {
     void myIPOModify(MyIPODTO dto);
     List<FirmsByStockCode> getFirms (String stockCode);
     List<FirmsByStockCode> getFirmsBySno(Long sno);
+    List<Long> getSummary(PageRequestDTO requestDTO);
 
     PageResultDTO<IPODTO, IPO> getIPOList(PageRequestDTO requestDTO);
 
@@ -42,6 +43,7 @@ public interface POService {
                 .offeringPrice(dto.getOfferingPrice())
                 .leadingFirm(dto.getLeadingFirm())
                 .unlistedPrice(dto.getUnlistedPrice())
+                .detailURL(dto.getDetailURL())
                 .build();
         return entity;
     }
@@ -58,6 +60,7 @@ public interface POService {
                 .offeringPrice(entity.getOfferingPrice())
                 .leadingFirm(entity.getLeadingFirm())
                 .unlistedPrice(entity.getUnlistedPrice())
+                .detailURL(entity.getDetailURL())
                 .build();
 
         return dto;
