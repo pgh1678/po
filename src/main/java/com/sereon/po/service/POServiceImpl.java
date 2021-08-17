@@ -4,9 +4,11 @@ import com.querydsl.jpa.OpenJPATemplates;
 import com.sereon.po.dto.*;
 import com.sereon.po.entity.FirmsByStockCode;
 import com.sereon.po.entity.IPO;
+import com.sereon.po.entity.MyAccount;
 import com.sereon.po.entity.Subscription;
 import com.sereon.po.repository.FirmsRepository;
 import com.sereon.po.repository.IPORepository;
+import com.sereon.po.repository.MyAccountRepository;
 import com.sereon.po.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +32,7 @@ public class POServiceImpl implements POService{
     private final IPORepository ipoRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final FirmsRepository firmsRepository;
+    private final MyAccountRepository myAccountRepository;
 
     @Override
     public PageResultDTO<IPODTO, IPO> getIPOList(PageRequestDTO requestDTO){
@@ -215,6 +218,8 @@ public class POServiceImpl implements POService{
 
         return result;
     }
+
+
     @Override
     public void myIPOModify(MyIPODTO dto){
         Optional<Subscription> result = subscriptionRepository.findById(dto.getSno());
@@ -230,11 +235,33 @@ public class POServiceImpl implements POService{
             entity.setIPO(IPO.builder().stockCode(dto.getStockCode()).build());
             entity.setStockFirm(dto.getStockFirm());
             entity.setSubsAmt(dto.getSubsAmt());
+            entity.setInterest(dto.getInterest());
+            entity.setLoan(dto.getLoan());
 
 
             subscriptionRepository.save(entity);
 
         }
+    }
+
+    @Override
+    public AccountDTO getMyAccount(String email){
+        log.info("MyAccount Read");
+        log.info("email : "+email);
+
+        Optional<MyAccount> myAccount = myAccountRepository.findById(email);
+
+        return myAccount.isPresent()? entityToDTO((myAccount.get())): AccountDTO.builder().interestRate(0).build();
+    }
+
+    @Override
+    public void myAccountSave(AccountDTO dto){
+        log.info("myAccount Save");
+        log.info("dto : "+dto);
+
+        MyAccount entity = dtoToEntity(dto);
+
+        myAccountRepository.save(entity);
     }
 
 }

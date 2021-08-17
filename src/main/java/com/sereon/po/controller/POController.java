@@ -1,5 +1,6 @@
 package com.sereon.po.controller;
 
+import com.sereon.po.dto.AccountDTO;
 import com.sereon.po.dto.IPODTO;
 import com.sereon.po.dto.MyIPODTO;
 import com.sereon.po.dto.PageRequestDTO;
@@ -100,12 +101,13 @@ public class POController
     }
 
     @GetMapping("/myIPORegister")
-    public void myIPORegister(String stockCode, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Model model) {
+    public void myIPORegister(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, String stockCode, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Model model) {
         log.info("My IPO Register Page");
         log.info("stockCode : " + stockCode);
 
         model.addAttribute("dto", poService.IPORead(stockCode));
         model.addAttribute("firms", poService.getFirms(stockCode));
+        model.addAttribute("account", poService.getMyAccount(poAuthMemberDTO.getEmail()));
     }
 
     @PostMapping("/myIPORegister")
@@ -121,12 +123,13 @@ public class POController
 
 
     @GetMapping({"/myIPORead", "myIPOModify"})
-    public void myIPORead(Long sno, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Model model){
+    public void myIPORead(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, Long sno, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Model model){
         log.info("myIPO Detail Page");
         log.info("sno : "+sno);
 
         model.addAttribute("dto", poService.myIPORead(sno));
         model.addAttribute("firms", poService.getFirmsBySno(sno));
+        model.addAttribute("account", poService.getMyAccount(poAuthMemberDTO.getEmail()));
     }
 
     @PostMapping("/myIPOModify")
@@ -135,6 +138,7 @@ public class POController
         log.info("dto : "+ dto);
         pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
         poService.myIPOModify(dto);
+
 
         redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
         redirectAttributes.addAttribute("sno", dto.getSno());
@@ -156,5 +160,22 @@ public class POController
         log.info("IPOPopUp list");
 
         model.addAttribute("result", poService.getIPOList(pageRequestDTO));
+    }
+
+    @GetMapping("/MyAccount")
+    public void myAccountRead(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, PageRequestDTO pageRequestDTO, Model model){
+        log.info("MyAccount");
+        pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
+
+        model.addAttribute("result", poService.getMyAccount(poAuthMemberDTO.getEmail()));
+    }
+
+    @PostMapping("/MyAccount")
+    public void myAccountSave(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, AccountDTO dto, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO){
+        log.info("myAccount Save");
+        pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
+        dto.setEmail(poAuthMemberDTO.getEmail());
+
+        poService.myAccountSave(dto);
     }
 }

@@ -52,5 +52,7 @@ public class MyIPODTO {
 
     private String stockCode;
 
+    private Long loan;
+
     private LocalDateTime regDate, chgDate;
 }

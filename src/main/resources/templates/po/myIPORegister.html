@@ -10,6 +10,21 @@
       function calc_deposit(){
           document.getElementsByName('deposit')[0].value = [[${dto.offeringPrice}]]*document.getElementsByName('subsAmt')[0].value /2;
       }
+
+      function change_format(date){
+        newDate = date.substr(0,4)+"-"+date.substr(4,2)+"-"+date.substr(6,2);
+        return newDate;
+      }
+
+      function calc_interest(){
+          var refund_date = new Date(change_format([[${dto.refundDate}]]));
+          var end_date = new Date(change_format([[${dto.endDate}]]));
+          var diff = refund_date - end_date;
+          days = diff / (24 * 60 * 60 * 1000);
+
+          var interest = (document.getElementsByName('loan')[0].value * [[${account.interestRate}]] /100)/365*days;
+          document.getElementsByName('interest')[0].value = interest.toFixed(0);
+      }
     </script>
 
     <form th:action="@{/po/myIPORegister}" th:method="post">
@@ -45,7 +60,20 @@
           <input type="text" class="form-control" name="subsAmt"  onchange="calc_deposit();" required>
         </div>
         <label >증거금</label>
-        <input type="text" class="form-control" name="deposit"  required>
+        <div class="row" style="white-space:nowrap;">
+          <div class="col-xs-2 ml-4" style="white-space:nowrap;">
+            <input type="text" class="form-control" name="deposit"  required>
+          </div>
+          <div class="col-xs-2 ml-5" style="white-space:nowrap;">
+            <label >( 대출금 </label>
+          </div>
+          <div class="col-xs-1 ml-2" style="white-space:nowrap;">
+            <input type="text" class="form-control" name="loan" onchange="calc_interest()">
+          </div>
+          <div class="col-xs-1" style="white-space:nowrap;">
+            <label >) </label>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label >배정주수</label>

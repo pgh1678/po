@@ -2,6 +2,7 @@ package com.sereon.po.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -27,6 +28,9 @@ public class User extends BaseEntity{
 
     @Column(length = 11)
     private String mobile;
+
+    @Column(nullable = true)
+    private String telegramId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

@@ -23,7 +23,20 @@
     </div>
     <div class="form-group">
       <label >증거금</label>
-      <input type="text" class="form-control" name="deposit" th:value="${dto.deposit}" readonly >
+      <div class="row" style="white-space:nowrap;">
+        <div class="col-xs-2 ml-4" style="white-space:nowrap;">
+          <input type="text" class="form-control" name="deposit" th:value="${dto.deposit}"   readonly>
+        </div>
+        <div class="col-xs-2 ml-5" style="white-space:nowrap;">
+          <label >( 대출금 </label>
+        </div>
+        <div class="col-xs-1 ml-2" style="white-space:nowrap;">
+          <input type="text" class="form-control" name="loan" th:value="${dto.loan}" readonly>
+        </div>
+        <div class="col-xs-1" style="white-space:nowrap;">
+          <label >) </label>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label >청약주수</label>

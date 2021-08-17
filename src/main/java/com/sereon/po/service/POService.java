@@ -3,6 +3,7 @@ package com.sereon.po.service;
 import com.sereon.po.dto.*;
 import com.sereon.po.entity.FirmsByStockCode;
 import com.sereon.po.entity.IPO;
+import com.sereon.po.entity.MyAccount;
 import com.sereon.po.entity.Subscription;
 import org.springframework.data.domain.Page;
 
@@ -30,6 +31,9 @@ public interface POService {
     PageResultDTO<MyIPODTO, Object[]> getMyIPOList(PageRequestDTO requestDTO);
 
     PageResultDTO<MyIPODTO, Subscription> getMyIPOListByPeriod(PageRequestDTO requestDTO);
+
+    AccountDTO getMyAccount(String email);
+    void myAccountSave(AccountDTO dto);
 
     default IPO dtoToEntity(IPODTO dto){
         IPO entity = IPO.builder()
@@ -79,6 +83,7 @@ public interface POService {
                 .tax(dto.getTax())
                 .interest(dto.getInterest())
                 .userId(dto.getUserId())
+                .loan(dto.getLoan())
                 .build();
         return entity;
     }
@@ -103,6 +108,7 @@ public interface POService {
                 .startDate(entity.getIPO().getStartDate())
                 .endDate(entity.getIPO().getEndDate())
                 .stockCode(entity.getIPO().getStockCode())
+                .loan(entity.getLoan())
                 .build();
 
         return dto;
@@ -128,6 +134,7 @@ public interface POService {
                 .startDate(ipo.getStartDate())
                 .endDate(ipo.getEndDate())
                 .stockCode(ipo.getStockCode())
+                .loan(entity.getLoan())
                 .build();
 
         return dto;
@@ -141,6 +148,28 @@ public interface POService {
                 .assignAmt(entity.getAssignAmt())
                 .limitAmt(entity.getLimitAmt())
                 .RMK(entity.getRMK())
+                .build();
+
+        return dto;
+    }
+
+    default MyAccount dtoToEntity(AccountDTO dto){
+        MyAccount entity = MyAccount.builder()
+                .email(dto.getEmail())
+                .bankName(dto.getBankName())
+                .investmentMoney(dto.getInvestmentMoney())
+                .interestRate(dto.getInterestRate())
+                .build();
+
+        return entity;
+    }
+
+    default  AccountDTO entityToDTO(MyAccount entity){
+        AccountDTO dto = AccountDTO.builder()
+                .email(entity.getEmail())
+                .bankName(entity.getBankName())
+                .investmentMoney(entity.getInvestmentMoney())
+                .interestRate(entity.getInterestRate())
                 .build();
 
         return dto;
