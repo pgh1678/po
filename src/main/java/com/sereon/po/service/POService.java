@@ -90,7 +90,7 @@ public interface POService {
 
     default MyIPODTO entityToDTO(Subscription entity){
         MyIPODTO dto = MyIPODTO.builder()
-                .assignAmt(entity.getAssignAmt()==null ? 0 : entity.getAssignAmt())
+                .assignAmt(entity.getAssignAmt())
                 .fee(entity.getFee()==null ? 0 : entity.getFee())
                 .IPO(entity.getIPO())
                 .deposit(entity.getDeposit())
@@ -116,7 +116,7 @@ public interface POService {
 
     default MyIPODTO entityToDTO(Subscription entity, IPO ipo){
         MyIPODTO dto = MyIPODTO.builder()
-                .assignAmt(entity.getAssignAmt()==null ? 0 : entity.getAssignAmt())
+                .assignAmt(entity.getAssignAmt())
                 .fee(entity.getFee()==null ? 0 : entity.getFee())
                 .IPO(entity.getIPO())
                 .deposit(entity.getDeposit())
