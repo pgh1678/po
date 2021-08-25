@@ -124,12 +124,12 @@
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
         <td><script th:inline="javascript">
                       if ([[${dto.assignAmt}]]!=null) {
-                          var temp = [[${dto.sellPrice}]] == 0 ? 0 : ([[${dto.sellPrice} - ${dto.offeringPrice}]])*[[${dto.assignAmt}]] - [[${dto.fee}]]-[[${dto.tax}]];
+                          var temp = [[${dto.sellPrice}]] == 0 ? 0 : ([[${dto.sellPrice} - ${dto.offeringPrice}]])*[[${dto.assignAmt}]] - [[${dto.fee}]]-[[${dto.tax}]]-[[${dto.interest}]];
                           sum_profit = sum_profit + temp;
                           document.write(temp.toLocaleString('ko-KR')+"원");}</script></td>
         <td><script th:inline="javascript">
                       if ([[${dto.assignAmt}]]!=null) {
-                          temp = [[${dto.assignAmt}]] == 0 || [[${dto.sellPrice}]] == 0 ? 0 : ([[(${dto.sellPrice}-${dto.offeringPrice})]]*[[${dto.assignAmt}]]-[[${dto.fee}]]-[[${dto.tax}]])/([[${dto.assignAmt}]]*[[${dto.offeringPrice}]])*100;
+                          temp = [[${dto.assignAmt}]] == 0 || [[${dto.sellPrice}]] == 0 ? 0 : ([[(${dto.sellPrice}-${dto.offeringPrice})]]*[[${dto.assignAmt}]]-[[${dto.fee}]]-[[${dto.tax}]]-[[${dto.interest}]])/([[${dto.assignAmt}]]*[[${dto.offeringPrice}]])*100;
                           document.write(temp.toLocaleString('ko-KR')+"%");}</script></td>
         <td><script th:inline="javascript">
                       if ([[${dto.assignAmt}]]!=null) {
