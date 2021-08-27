@@ -33,6 +33,8 @@ public class IPODTO {
 
     private String detailURL;
 
+    private String type;
+
 
 
     private LocalDateTime regDate, chgDate;

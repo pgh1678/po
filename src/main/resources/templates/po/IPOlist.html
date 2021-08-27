@@ -14,6 +14,11 @@
     left: 0;
     z-index: 99;
   }
+  div.type {
+        font-size:xx-small;
+        color: #CD4646;
+        font-weight: bold;
+  }
 
   table.table-striped tr:nth-of-type(odd) td:nth-child(1) {
     background-color: #f2f2f2; / restore table-striped */
@@ -79,18 +84,18 @@
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
-                <td><a th:href="@{/po/IPOread(stockCode = ${dto.stockCode}, page= ${result.page})}">[[${dto.name}]]</a></td>
+                <td><div class="type">[[${dto.type}]]</div><a th:href="@{/po/IPOread(stockCode = ${dto.stockCode}, page= ${result.page})}">[[${dto.name}]]</a></td>
                 <th scope=="row" hidden="true" >[[${dto.stockCode}]]</th>
-                <td>[[${dto.startDate}]] ~ [[${dto.endDate}]]</td>
-                <td><script th:inline="javascript">
+                <td style="vertical-align: middle;">[[${dto.startDate}]] ~ [[${dto.endDate}]]</td>
+                <td style="vertical-align: middle;"><script th:inline="javascript">
                       var temp = [[${dto.offeringPrice}]];
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
-                <td><script th:inline="javascript">
+                <td style="vertical-align: middle;"><script th:inline="javascript">
                       var temp = [[${dto.unlistedPrice}]];
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
-                <td>[[${dto.listedDate}]]</td>
-                <td>[[${dto.refundDate}]]</td>
-                <td>[[${dto.leadingFirm}]]</td>
+                <td style="vertical-align: middle;">[[${dto.listedDate}]]</td>
+                <td style="vertical-align: middle;">[[${dto.refundDate}]]</td>
+                <td style="vertical-align: middle;">[[${dto.leadingFirm}]]</td>
                 <div sec:authorize="isAuthenticated()"><td><a th:href="@{/po/myIPORegister(stockCode = ${dto.stockCode})}"><button>등록</button></a></td></div>
             </tr>
             </tbody>

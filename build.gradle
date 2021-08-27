@@ -39,9 +39,11 @@ dependencies {
 	compile group: 'org.thymeleaf.extras', name:'thymeleaf-extras-java8time'
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	compile group: 'org.apache.poi', name: 'poi', version: '3.11'
-	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'
+	compile group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
+	implementation 'org.apache.poi:poi:4.1.2'
+	implementation 'org.apache.poi:poi-ooxml:4.1.2'
 }
 
 test {
