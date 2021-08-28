@@ -206,7 +206,7 @@ public interface POService {
                 .buyAmt(entity.getAssignAmt()==null? null: buyAmt)
                 .profit(entity.getAssignAmt()==null? null: entity.getSellPrice()==null || entity.getSellPrice()==0? 0: profit)
                 .profitRate(entity.getAssignAmt()==null? 0.0: entity.getSellPrice()==null || entity.getSellPrice()==0? 0.0: profitRate)
-                .totalMoney(entity.getAssignAmt()==null||entity.getSellPrice()==null? null: ((entity.getSellPrice()-ipo.getOfferingPrice())* entity.getAssignAmt() - (entity.getFee()==null?0:entity.getFee()) - (entity.getTax()==null?0:entity.getTax())))
+                .totalMoney(entity.getAssignAmt()==null||entity.getSellPrice()==null? null: entity.getSellPrice()* entity.getAssignAmt() - (entity.getFee()==null?0:entity.getFee()) - (entity.getTax()==null?0:entity.getTax()))
                 .refundAmt(entity.getAssignAmt()==null? null: entity.getDeposit() - ipo.getOfferingPrice()*entity.getAssignAmt())
                 .build();
 
