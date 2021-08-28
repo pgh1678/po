@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -150,6 +151,22 @@ public class POServiceImpl implements POService{
             }
         }
         return new PageResultDTO(result1, fn);
+    }
+
+    @Override
+    public List<MyIPOExcelDTO> getMyIPOList(String userId){
+        log.info("Excel select");
+
+        Function<Object[], MyIPOExcelDTO> fn = (en -> entityToExcelDTO((Subscription)en[0],(IPO)en[1]));
+
+        List<Object[]> result = subscriptionRepository.findAllByUserId(userId);
+
+        for(Object[] a : result){
+            log.info("result : "+Arrays.toString(a));
+        }
+        List<MyIPOExcelDTO> dtoList = result.stream().map(fn).collect(Collectors.toList());
+
+        return dtoList;
     }
 
     @Override

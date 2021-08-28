@@ -1,5 +1,6 @@
 package com.sereon.po.service;
 
+import com.querydsl.jpa.OpenJPATemplates;
 import com.sereon.po.dto.*;
 import com.sereon.po.entity.FirmsByStockCode;
 import com.sereon.po.entity.IPO;
@@ -31,6 +32,8 @@ public interface POService {
     PageResultDTO<MyIPODTO, Object[]> getMyIPOList(PageRequestDTO requestDTO);
 
     PageResultDTO<MyIPODTO, Subscription> getMyIPOListByPeriod(PageRequestDTO requestDTO);
+
+    List<MyIPOExcelDTO> getMyIPOList(String userId);
 
     AccountDTO getMyAccount(String email);
     void myAccountSave(AccountDTO dto);
@@ -176,6 +179,40 @@ public interface POService {
 
         return dto;
     }
+
+    default MyIPOExcelDTO entityToExcelDTO(Subscription entity, IPO ipo) {
+        Long buyAmt = entity.getAssignAmt()==null? null: ipo.getOfferingPrice()*entity.getAssignAmt();
+        Long profit = (entity.getAssignAmt()==null? null: entity.getSellPrice()==null || entity.getSellPrice()==0? 0: (entity.getSellPrice()-ipo.getOfferingPrice())* entity.getAssignAmt() - (entity.getFee()==null?0:entity.getFee()) - (entity.getInterest()==null?0:entity.getInterest()) - (entity.getTax()==null?0:entity.getTax()));
+        Double profitRate = profit == null||buyAmt==null||buyAmt==0? null : ((float) profit / (float) buyAmt) * 100.00;
+
+        MyIPOExcelDTO dto = MyIPOExcelDTO.builder()
+                .assignAmt(entity.getAssignAmt())
+                .deposit(entity.getDeposit())
+                .fee(entity.getFee())
+                .interest(entity.getInterest())
+                .listedDate(ipo.getListedDate())
+                .loan(entity.getLoan())
+                .name(ipo.getName())
+                .offeringPrice(ipo.getOfferingPrice())
+                .refundDate(ipo.getRefundDate())
+                .sno(entity.getSno())
+                .sellPrice(entity.getSellPrice())
+                .endDate(ipo.getEndDate())
+                .startDate(ipo.getStartDate())
+                .stockCode(ipo.getStockCode())
+                .stockFirm(entity.getStockFirm())
+                .subsAmt(entity.getSubsAmt())
+                .tax(entity.getTax())
+                .buyAmt(entity.getAssignAmt()==null? null: buyAmt)
+                .profit(entity.getAssignAmt()==null? null: entity.getSellPrice()==null || entity.getSellPrice()==0? 0: profit)
+                .profitRate(entity.getAssignAmt()==null? 0.0: entity.getSellPrice()==null || entity.getSellPrice()==0? 0.0: profitRate)
+                .totalMoney(entity.getAssignAmt()==null||entity.getSellPrice()==null? null: ((entity.getSellPrice()-ipo.getOfferingPrice())* entity.getAssignAmt() - (entity.getFee()==null?0:entity.getFee()) - (entity.getTax()==null?0:entity.getTax())))
+                .refundAmt(entity.getAssignAmt()==null? null: entity.getDeposit() - ipo.getOfferingPrice()*entity.getAssignAmt())
+                .build();
+
+        return dto;
+    }
+
 }
 
 

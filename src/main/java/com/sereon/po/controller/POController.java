@@ -1,15 +1,15 @@
 package com.sereon.po.controller;
 
-import com.sereon.po.dto.AccountDTO;
-import com.sereon.po.dto.IPODTO;
-import com.sereon.po.dto.MyIPODTO;
-import com.sereon.po.dto.PageRequestDTO;
+import com.sereon.po.dto.*;
+import com.sereon.po.entity.ExcelCell;
 import com.sereon.po.entity.IPO;
 import com.sereon.po.entity.Subscription;
 import com.sereon.po.security.dto.PoAuthMemberDTO;
+import com.sereon.po.service.ExcelService;
 import com.sereon.po.service.POService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.util.List;
+
 @Controller
 @RequestMapping("/po")
 @Log4j2
@@ -27,6 +32,7 @@ public class POController
 {
 
     private final POService poService;
+    private final ExcelService excelService;
 
     @GetMapping({"/",""})
     public String index(){
@@ -177,5 +183,37 @@ public class POController
         dto.setEmail(poAuthMemberDTO.getEmail());
 
         poService.myAccountSave(dto);
+    }
+
+    @GetMapping("/ExcelDown")
+    public void excelDownload(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, PageRequestDTO pageRequestDTO, Model model, HttpServletResponse response){
+        log.info("Excel Download");
+
+        pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
+        List  myIPOExcelDTOs = poService.getMyIPOList(poAuthMemberDTO.getEmail());
+        List<ExcelCell> excelCell = excelService.getCellProp("myIPO");
+
+        XSSFWorkbook xlsxWB = excelService.createExcel("MYIPO.xlsx", excelCell, myIPOExcelDTOs);
+        BufferedOutputStream outputStream = null;
+
+        response.setContentType("ms-vnd/excel");
+        response.setHeader("Content-Disposition", "attachment;filename=MYIPO.xlsx");
+        try {
+            outputStream = new BufferedOutputStream(response.getOutputStream());
+            xlsxWB.write(outputStream);
+        }catch (Exception e){
+
+        }
+        finally {
+            try {
+                xlsxWB.close();
+                if (outputStream != null) outputStream.close();
+            }
+            catch (Exception e){
+
+            }
+        }
+
+
     }
 }

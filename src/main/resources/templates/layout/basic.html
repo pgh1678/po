@@ -71,7 +71,7 @@
                             <div sec:authorize="isAuthenticated()"><a class="dropdown-item" href="javascript:openBank();">계좌설정</a></div>
 
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="@{/po/ExcelDown}">엑셀다운로드</a></div>
                         </div>
                     </li>
                 </ul>
