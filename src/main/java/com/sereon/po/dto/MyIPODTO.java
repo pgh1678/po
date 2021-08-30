@@ -54,5 +54,7 @@ public class MyIPODTO {
 
     private Long loan;
 
+    private Long nowVal;
+
     private LocalDateTime regDate, chgDate;
 }

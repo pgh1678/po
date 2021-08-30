@@ -140,6 +140,7 @@ public interface POService {
                 .endDate(ipo.getEndDate())
                 .stockCode(ipo.getStockCode())
                 .loan(entity.getLoan())
+                .nowVal(ipo.getNowVal())
                 .build();
 
         return dto;

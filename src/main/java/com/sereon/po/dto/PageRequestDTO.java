@@ -28,7 +28,24 @@ public class PageRequestDTO {
 
     public PageRequestDTO(){
         this.page = 1;
-        this.size = 12;
+        this.size = 20;
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        year = Integer.parseInt(sdf.format(date));
+
+        sdf = new SimpleDateFormat("MM");
+        month = Integer.parseInt(sdf.format(date));
+
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        toDt = sdf.format(date);
+
+        System.out.println(toDt);
+
+    }
+
+    public PageRequestDTO(int size){
+        this.page = 1;
+        this.size = size;
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         year = Integer.parseInt(sdf.format(date));

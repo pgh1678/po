@@ -16,5 +16,5 @@ public interface IPORepository extends JpaRepository<IPO, String> {
     Page<IPO> findAllM(Pageable pageable,@Param("YYYYMM") String YYYYMM);
 
     @Query("select i from IPO i where i.stockCode = :stockCode")
-    Optional<IPO> getIPOByStockCode(String stockCode);
+    Optional<IPO> getIPOByStockCode(@Param("stockCode") String stockCode);
 }

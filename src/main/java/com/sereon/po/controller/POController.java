@@ -93,6 +93,7 @@ public class POController
         log.info("myIPO list");
 
         pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
+        pageRequestDTO.setSize(12);
         model.addAttribute("result", poService.getMyIPOListByPeriod(pageRequestDTO));
         model.addAttribute("summary", poService.getSummary(pageRequestDTO));
 
