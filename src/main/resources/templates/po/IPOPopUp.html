@@ -33,24 +33,28 @@
     <h1 class="mt-4">공모주 리스트
     </h1>
     <script th:inline="javascript">
-
+      function linkToOpener(stockCode){
+        if (window.opener && !window.opener.closed)
+        window.opener.location = "/po/myIPORegister?stockCode="+stockCode;
+        window.close();
+      }
     </script>
     <div class="container-fluid" style="overflow:auto">
       <ul class="pagination justify-center align-items-center" style="white-space:nowrap;font-size:9px">
 
         <li class="page-item " th:if="${year}">
-          <a class="page-link" th:href="@{/po/IPOlist(year= ${year - 1}, month = 12) }" tabindex="-1">Previous</a>
+          <a class="page-link" th:href="@{/po/IPOPopUp(year= ${year - 1}, month = 12) }" tabindex="-1">Previous</a>
         </li>
 
         <li th:class=" 'page-item ' + ${month == seq?'active':''} " th:each="seq:${#numbers.sequence(1,12)}" >
-          <a class="page-link" th:href="@{/po/IPOlist(year = ${year} ,
+          <a class="page-link" th:href="@{/po/IPOPopUp(year = ${year} ,
                        month = ${seq}  )}">
             [[${seq}]]월
           </a>
         </li>
 
         <li class="page-item" th:if="${year}">
-          <a class="page-link" th:href="@{/po/IPOlist(year= ${year +  1} ,month = 1 )}">Next</a>
+          <a class="page-link" th:href="@{/po/IPOPopUp(year= ${year +  1} ,month = 1 )}">Next</a>
         </li>
 
       </ul>
@@ -68,7 +72,8 @@
         <tbody>
         <tr th:each="dto : ${result.dtoList}">
           <th scope=="row" hidden="true" >[[${dto.stockCode}]]</th>
-          <td><a th:href="@{/po/IPOread(stockCode = ${dto.stockCode}, page= ${result.page})}">[[${dto.name}]]</a></td>
+
+          <td><a href="#" th:onclick="javascript:linkToOpener([[${dto.stockCode}]])">[[${dto.name}]]</a></td>
           <td>[[${dto.startDate}]] ~ [[${dto.endDate}]]</td>
           <td>[[${dto.listedDate}]]</td>
         </tr>

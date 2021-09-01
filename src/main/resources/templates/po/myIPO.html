@@ -27,9 +27,9 @@
       var sum_profit = 0;
     </script>
     <h1 class="mt-4">청약 내역 리스트</h1>
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#reg" disabled>
+    <a th:href="@{/po/IPOPopUp}"> <button type="button" class="btn btn-primary btn-sm searchBtn" >
       신규등록
-    </button>
+    </button></a>
 
 
     <br>
@@ -223,6 +223,14 @@
 
         $('.btn-search').click(function(e){
                 searchForm.submit();
+        });
+
+        $(".searchBtn").click(function() {
+
+          SearchStock = window.open("IPOPopUp", "StockSearch", "width=666,height=700,left=250,top=50,dependent=yes,menubar=no,status=no,resizable=yes,toolbar=no,scrollbars=yes");
+          SearchStock.location.href = 'IPOPopUp';
+          SearchStock.focus();
+          return false;
         });
     </script>
   </th:block>
