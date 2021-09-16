@@ -142,8 +142,9 @@ public class POController
     @PostMapping("/myIPOModify")
     public String myIPOModify(@AuthenticationPrincipal PoAuthMemberDTO poAuthMemberDTO, MyIPODTO dto, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes){
         log.info("myIPO Modify Page");
-        log.info("dto : "+ dto);
+
         pageRequestDTO.setUserId(poAuthMemberDTO.getEmail());
+        log.info("dto : "+ dto);
         poService.myIPOModify(dto);
 
 
@@ -216,5 +217,11 @@ public class POController
         }
 
 
+    }
+
+    @GetMapping("/ajaxTest")
+    public void ajaxTest(PageRequestDTO pageRequestDTO, Model model){
+        log.info("TEST!!!!!!!!!!!!!!!");
+        model.addAttribute("result", poService.getIPOList(pageRequestDTO));
     }
 }
