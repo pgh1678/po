@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+  thead {
+    position: sticky;
+    top: 0;
+  }
+
+  th:first-child,
+  td:first-child {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #fff;
+    left: 0;
+    z-index: 99;
+  }
+
+  table.table-striped tr:nth-of-type(odd) td:nth-child(1) {
+    background-color: #f2f2f2; / restore table-striped */
+  }
+
+</style>
+<th:block th:replace="~{layout/basic :: setContent(~{this::content} )}">
+
+  <th:block th:fragment="content"  >
+    <script th:inline="javascript">
+      var sum_profit = 0;
+    </script>
+    <h1 class="mt-4">청약 내역 리스트</h1>
+    <a th:href="@{/po/IPOPopUp}"> <button type="button" class="btn btn-primary btn-sm searchBtn" >
+      신규등록
+    </button></a>
+
+
+    <br>
+    <div style="white-space:nowrap;  overflow:auto">
+      <form action="/po/myIPO" method="get" id="searchForm" style="width:600px; white-space:nowrap;">
+        <div class="input-group"  style="white-space:nowrap;">
+          <input type="hidden" name="page" value = "1">
+          <div class="input-group-prepend">
+            <select class="custom-select" name="type">
+              <option value="a" th:selected="${pageRequestDTO.type =='a'}" >전체</option>
+              <option value="l" th:selected="${pageRequestDTO.type =='l'}" >상장일</option>
+              <option value="f" th:selected="${pageRequestDTO.type =='f'}"  >청약시작일</option>
+              <option value="t"  th:selected="${pageRequestDTO.type =='t'}" >청약종료일</option>
+            </select>
+          </div>
+          <input  type="date" name="fromDt" th:value="${pageRequestDTO.fromDt}">
+          <h4>~</h4>
+          <input  type="date" name="toDt"  th:value="${pageRequestDTO.toDt}">
+          <div class="input-group-append" id="button-addon4">
+            <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <br>
+    <div style="overflow:auto">
+      <table class="table table-striped" style="white-space:nowrap; overflow:auto" >
+        <thead >
+        <tr>
+          <th scope="col" width="400px">종목명</th>
+          <th scope="col" hidden="true">sno</th>
+          <th scope="col" hidden="true">종목코드</th>
+          <th scope="col" width="250px">공모가</th>
+          <th scope="col" width="250px">상장일</th>
+          <th scope="col" width="250px">환불일</th>
+          <th scope="col" width="250px">증권사</th>
+          <th scope="col" width="250px">증거금</th>
+          <th scope="col" width="250px">청약수량</th>
+          <th scope="col" width="250px">배정수량</th>
+          <th scope="col" width="250px">매수금액</th>
+          <th scope="col" width="250px">환불액</th>
+          <th scope="col" width="250px">매도금액</th>
+          <th scope="col" width="250px">수수료</th>
+          <th scope="col" width="250px">세금</th>
+          <th scope="col" width="250px">이자</th>
+          <th scope="col" width="250px">실현손익</th>
+          <th scope="col" width="250px">수익률</th>
+          <th scope="col" width="250px">예수금</th>
+          <th scope="col" width="250px">현재가</th>
+          <th scope="col">      </th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr th:each="dto : ${result.dtoList}" >
+          <td><a th:href="@{/po/myIPORead(sno = ${dto.sno}, page= ${result.page})}">[[${dto.name}]]</a></td>
+          <th scope=="row" hidden="true" >[[${dto.sno}]]</th>
+          <td hidden="true">[[${dto.stockCode}]]</td>
+
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.offeringPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td>[[${dto.listedDate}]]</td>
+          <td>[[${dto.refundDate}]]</td>
+          <td>[[${dto.stockFirm}]]</td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.deposit}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.subsAmt}]];
+                      document.write(temp.toLocaleString('ko-KR'));</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.assignAmt}]];
+                      if ([[${dto.assignAmt}]] != null){ document.write(temp.toLocaleString('ko-KR')); } </script></td>
+          <td><script th:inline="javascript">
+                       if ([[${dto.assignAmt}]]!=null) {
+                            var temp = [[${dto.assignAmt}]]*[[${dto.offeringPrice}]];
+                            document.write(temp.toLocaleString('ko-KR')+"원");}</script></td>
+          <td><script th:inline="javascript">
+                      if ([[${dto.assignAmt}]]!=null) {
+                            var temp = [[${dto.deposit}]] - [[${dto.assignAmt}]]*[[${dto.offeringPrice}]];
+                            document.write(temp.toLocaleString('ko-KR')+"원");}</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.sellPrice}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.fee}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.tax}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><script th:inline="javascript">
+                      var temp = [[${dto.interest}]];
+                      document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><script th:inline="javascript">
+                      if ([[${dto.assignAmt}]]!=null) {
+                          var temp = [[${dto.sellPrice}]] == 0 ? 0 : ([[${dto.sellPrice} - ${dto.offeringPrice}]])*[[${dto.assignAmt}]] - [[${dto.fee}]]-[[${dto.tax}]]-[[${dto.interest}]];
+                          sum_profit = sum_profit + temp;
+                          document.write(temp.toLocaleString('ko-KR')+"원");}</script></td>
+          <td><script th:inline="javascript">
+                      if ([[${dto.assignAmt}]]!=null) {
+                          temp = [[${dto.assignAmt}]] == 0 || [[${dto.sellPrice}]] == 0 ? 0 : ([[(${dto.sellPrice}-${dto.offeringPrice})]]*[[${dto.assignAmt}]]-[[${dto.fee}]]-[[${dto.tax}]]-[[${dto.interest}]])/([[${dto.assignAmt}]]*[[${dto.offeringPrice}]])*100;
+                          document.write(temp.toLocaleString('ko-KR')+"%");}</script></td>
+          <td><script th:inline="javascript">
+                      if ([[${dto.assignAmt}]]!=null) {
+                          var temp = ([[${dto.sellPrice}]]*[[${dto.assignAmt}]])-[[${dto.fee}]]-[[${dto.tax}]];
+                          document.write(temp.toLocaleString('ko-KR')+"원");}</script></td>
+          <td><script th:inline="javascript">
+                          var temp = [[${dto.nowVal}]] == null? 0 : [[${dto.nowVal}]];
+                          document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td><a th:href="@{/po/myIPOModify(sno = ${dto.sno})}"><button>수정</button></a></td>
+        </tr>
+        <tr>
+          <td hidden></td>
+          <td colspan="3">연간 실현 손익 합계</td>
+          <td colspan="5"><script th:inline="javascript">var temp = [[${summary[0]}]]; document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
+          <td colspan="3">수익률</td>
+          <td colspan="5">[[${#numbers.formatDecimal(((summary[0]*1.0) / summary[1])*100,0,2)}]]</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+    <ul class="pagination h-100 justify-content-center align-items-center">
+
+      <li class="page-item " th:if="${result.prev}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${result.start -1},
+                    type=${pageRequestDTO.type}) }" tabindex="-1">Previous</a>
+      </li>
+
+      <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${page},
+                    type=${pageRequestDTO.type}) }">
+          [[${page}]]
+        </a>
+      </li>
+
+      <li class="page-item" th:if="${result.next}">
+        <a class="page-link" th:href="@{/po/myIPO(page= ${result.end + 1} ,
+                    type=${pageRequestDTO.type})">Next</a>
+      </li>
+
+    </ul>
+    <div hidden><a th:href="@{/po/ExcelDown}"> <button>엑셀다운로드</button></a></div>
+
+    <div class="modal" id="reg" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/po/IPOListForPopup" method="get" id="searchStock" style="width:600px; white-space:nowrap;">
+              <div class="input-group"  style="white-space:nowrap;">
+                <input  type="input" name="stockName" required>
+                <div class="input-group-append" id="button-addon5">
+                  <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+
+            var msg = [[${msg}]];
+
+            console.log(msg);
+
+            if(msg){
+                $(".modal").modal();
+            }
+
+        function addComma(value){
+          var temp = value;
+          document.write(temp.toLocaleString('ko-KR'))
+        }
+
+        var searchForm = $("#searchForm");
+
+        $('.btn-search').click(function(e){
+                searchForm.submit();
+        });
+
+        $(".searchBtn").click(function() {
+
+          SearchStock = window.open("IPOPopUp", "StockSearch", "width=666,height=700,left=250,top=50,dependent=yes,menubar=no,status=no,resizable=yes,toolbar=no,scrollbars=yes");
+          SearchStock.location.href = 'IPOPopUp';
+          SearchStock.focus();
+          return false;
+        });
+    </script>
+  </th:block>
+</th:block>
+</html>
