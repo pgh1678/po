@@ -40,9 +40,11 @@
           <div class="input-group-prepend">
             <select class="custom-select" name="type">
               <option value="a" th:selected="${pageRequestDTO.type =='a'}" >전체</option>
-              <option value="l" th:selected="${pageRequestDTO.type =='l'}" >상장일</option>
-              <option value="f" th:selected="${pageRequestDTO.type =='f'}"  >청약시작일</option>
-              <option value="t"  th:selected="${pageRequestDTO.type =='t'}" >청약종료일</option>
+
+              <option value="l" th:selected="${pageRequestDTO.type =='l'}" disabled>상장일</option>
+              <option value="f" th:selected="${pageRequestDTO.type =='f'}" disabled >청약시작일</option>
+              <option value="t"  th:selected="${pageRequestDTO.type =='t'}" disabled>청약종료일</option>
+
             </select>
           </div>
           <input  type="date" name="fromDt" th:value="${pageRequestDTO.fromDt}">

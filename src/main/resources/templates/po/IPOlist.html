@@ -93,7 +93,9 @@
                 <td style="vertical-align: middle;"><script th:inline="javascript">
                       var temp = [[${dto.unlistedPrice}]];
                       document.write(temp.toLocaleString('ko-KR')+"원");</script></td>
-                <td style="vertical-align: middle;">[[${dto.listedDate}]]</td>
+                <td style="vertical-align: middle;"><script th:inline="javascript">
+                      if ([[${dto.dropYN}]]!=null && [[${dto.dropYN}]] =="Y") {
+                            document.write("공모철회");} else {document.write([[${dto.listedDate}]])}</script></td>
                 <td style="vertical-align: middle;">[[${dto.refundDate}]]</td>
                 <td style="vertical-align: middle;">[[${dto.leadingFirm}]]</td>
                 <div sec:authorize="isAuthenticated()"><td><a th:href="@{/po/myIPORegister(stockCode = ${dto.stockCode})}"><button>등록</button></a></td></div>

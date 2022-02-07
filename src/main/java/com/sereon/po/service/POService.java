@@ -52,6 +52,7 @@ public interface POService {
                 .unlistedPrice(dto.getUnlistedPrice())
                 .detailURL(dto.getDetailURL())
                 .type(dto.getType())
+                .dropYN(dto.getDropYN())
                 .build();
         return entity;
     }
@@ -70,6 +71,7 @@ public interface POService {
                 .unlistedPrice(entity.getUnlistedPrice())
                 .detailURL(entity.getDetailURL())
                 .type(entity.getType())
+                .dropYN(entity.getDropYN())
                 .build();
 
         return dto;

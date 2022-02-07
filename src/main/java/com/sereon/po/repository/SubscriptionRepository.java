@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-    @Query("select s, i from Subscription s inner join IPO i on i = s.IPO.stockCode where i.listedDate between coalesce(:fromDt,'20200101') and :toDt")
-    Page<Object[]> findAllByListedDateBetween(Pageable pageable, @Param("fromDt") String fromDt, @Param("toDt")String toDt);
+    @Query("select s, i from Subscription s inner join IPO i on i = s.IPO.stockCode where s.userId=:userId and i.listedDate between coalesce(:fromDt,'20200101') and :toDt")
+    Page<Object[]> findAllByListedDateBetween(Pageable pageable, @Param("fromDt") String fromDt, @Param("toDt")String toDt, @Param("userId") String userId);
 
     @Query("select s, i from Subscription s join IPO i on i = s.IPO.stockCode where  i.startDate between coalesce(:fromDt,'20200101') and :toDt")
     Page<Object[]> findAllByStartDateBetween(Pageable pageable, @Param("fromDt") String fromDt, @Param("toDt") String toDt);

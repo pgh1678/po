@@ -35,6 +35,8 @@ public class IPODTO {
 
     private String type;
 
+    private String dropYN;
+
 
 
     private LocalDateTime regDate, chgDate;

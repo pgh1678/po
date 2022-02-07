@@ -128,11 +128,14 @@ public class POServiceImpl implements POService{
         Page<Object[]> result1 = null;
         if(requestDTO.getType() == null){
             log.info("Search Type :" + "a");
-            result1 = subscriptionRepository.findAllByUserId(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),requestDTO.getUserId());
+            log.info(requestDTO.getToDt().replace("-",""));
+            log.info(requestDTO.getFromDt().replace("-",""));
+            //result1 = subscriptionRepository.findAllByUserId(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),requestDTO.getUserId());
+            result1 = subscriptionRepository.findAllByListedDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),  fromDt, toDt, requestDTO.getUserId());
         }else if(requestDTO.getType().equals("l")) {
             log.info("Search Type :" + requestDTO.getType());
             log.info(requestDTO.getToDt().replace("-",""));
-            result1 = subscriptionRepository.findAllByListedDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),  fromDt, toDt);
+            result1 = subscriptionRepository.findAllByListedDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")),  fromDt, toDt, requestDTO.getUserId());
         }else if(requestDTO.getType().equals("f")){
             log.info("Search Type :" + requestDTO.getType());
             result1 = subscriptionRepository.findAllByStartDateBetween(requestDTO.getPageable(Sort.by(Sort.Direction.DESC,"IPO.listedDate")), fromDt, toDt);

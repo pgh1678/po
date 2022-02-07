@@ -46,6 +46,9 @@ public class IPO extends BaseEntity{
     @Column(length = 2, nullable = true)
     private String type;
 
+    @Column(length = 1, nullable = true)
+    private String dropYN;
+
     private Long nowVal;
 
     public void setStartDate(String startDate) {

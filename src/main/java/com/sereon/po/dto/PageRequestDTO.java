@@ -38,6 +38,7 @@ public class PageRequestDTO {
 
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         toDt = sdf.format(date);
+        fromDt = year+"-01-01";
 
         System.out.println(toDt);
 
